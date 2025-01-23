@@ -8,6 +8,7 @@
 - **Leitura de Arquivos:** Inclui um leitor integrado para visualização de conteúdo diretamente na plataforma.
 - **Busca:** Sistema de busca para localizar títulos ou autores na biblioteca.
 - **Interface Responsiva:** Desenvolvida com HTML e CSS para uma experiência fluida em dispositivos móveis e desktops.
+- **Marca texto:** marca o textp, deixa o texto clicável para comentários, mudança de cores
 
 ## Tecnologias Utilizadas
 
