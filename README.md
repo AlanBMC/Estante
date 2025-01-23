@@ -16,7 +16,8 @@
 - **Banco de Dados:** SQLite (configuração padrão, mas pode ser alterado para outro banco, como PostgreSQL ou MySQL).
 - **Outras Dependências:**
   - PyMuPDF (fitz) para manipulação de arquivos PDF.
-  - Biblioteca EPUBReader para arquivos EPUB.
+  - Biblioteca ebooklib e zipfile para arquivos EPUB.
+  
 
 ## Requisitos do Sistema
 
