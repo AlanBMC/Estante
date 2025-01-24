@@ -1,23 +1,32 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 import zipfile
 from bs4 import BeautifulSoup
 import os
+from django.conf import settings
+from .models import Documento
 # Create your views here.
 
 def estante(request):
     """
-    Funcionalidade: Lista os livros do usuario.
+    Funcionalidade: Lista os livros do usuario(no tengo users).
 
     """
+    livros = Documento.objects.all()
+    print(livros)
     return render(request, 'estante.html')
 
 
 def upload_epub(request):
     if request.method ==  'POST' and request.FILES['epub-file']:
         epub_file = request.FILES['epub-file']
-        processa_epub(epub_file)
+        titulo, html_path = processa_epub(epub_file)
+        documento = Documento.objects.create(
+            titulo=titulo,
+            conteudo_html=os.path.relpath(html_path, settings.MEDIA_ROOT),  # Caminho relativo ao MEDIA_ROOT
+            autor=titulo
+        )
         
-        return render(request, 'estante.html')
+        return redirect('estante')
     
 def processa_epub(epub_file):
 
@@ -29,9 +38,12 @@ def processa_epub(epub_file):
         None
     """
     nome_do_livro = str(epub_file).replace('.epub','')
-    os.makedirs(nome_do_livro, exist_ok=True)
+    livro_dir = os.path.join(settings.MEDIA_ROOT, 'documentos', nome_do_livro)
+    os.makedirs(livro_dir, exist_ok=True)
+
     # Nome do arquivo HTML de saída
-    output_file = os.path.join(nome_do_livro, f"{nome_do_livro}.html")
+    output_file = os.path.join(livro_dir, f"{nome_do_livro}.html")
+
 
     # Abrir e listar os arquivos no ePub
     with zipfile.ZipFile(epub_file, 'r') as z:
@@ -40,7 +52,7 @@ def processa_epub(epub_file):
             # Verificar e salvar imagens
             if file.lower().endswith(('.png', '.jpg', '.jpeg', '.gif', '.svg')):
                 image_data = z.read(file)
-                image_path = os.path.join(nome_do_livro, os.path.basename(file))
+                image_path = os.path.join(livro_dir, os.path.basename(file))
                 with open(image_path, 'wb') as img_file:
                     img_file.write(image_data)
 
@@ -72,4 +84,4 @@ def processa_epub(epub_file):
     with open(output_file, "w", encoding="utf-8") as f:
         f.write(page_content)
 
-    return 'ok'
+    return nome_do_livro, output_file
