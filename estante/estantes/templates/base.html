@@ -43,7 +43,7 @@
             </div>
             
             <div class="flex items-center justify-center">
-                    <form action="">
+                    <form action="{% url 'upload_epub' %}" enctype="multipart/form-data" method="POST">{% csrf_token %}
                         <input 
                             type="file" 
                             id="file-input" 
