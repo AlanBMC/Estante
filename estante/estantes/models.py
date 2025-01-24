@@ -1,10 +1,17 @@
 from django.db import models
+import os
+def upload_to(instance, filename):
+    """
+    Define o caminho onde o arquivo será salvo.
+    Exemplo: documentos/<titulo_do_documento>/<arquivo_html>
+    """
+    return os.path.join("documentos", instance.titulo, filename)
 
 # Create your models here.
 class Documento(models.Model):
     titulo = models.CharField(max_length=255)  # Título do documento
     autor = models.CharField(max_length=255, blank=True, null=True)  # Autor (opcional)
-    conteudo_html = models.TextField()  # HTML bruto convertido
+    conteudo_html = models.FileField(upload_to=upload_to)  # HTML bruto convertido
     data_criacao = models.DateTimeField(auto_now_add=True)  # Data de criação
     data_atualizacao = models.DateTimeField(auto_now=True)  # Data da última atualização
 
@@ -38,3 +45,4 @@ class Comentario(models.Model):
 
     def __str__(self):
         return f"Comentário na marcação: '{self.marcacao.selecao[:30]}...'"
+    
