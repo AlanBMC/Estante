@@ -115,7 +115,7 @@ def livro(request, id_livro):
     if html_content is None:  # Se não estiver na sessão, carregue do arquivo
         try:
             livro = Documento.objects.get(id=id_livro)
-            
+            print('ta entrando aqui')
             # Verifica se há conteúdo HTML associado ao livro
             if livro.conteudo_html:
                 file_path = livro.conteudo_html.path  # Caminho completo do arquivo

@@ -3,12 +3,12 @@
 {%load static %}
     {%block title%}Livro {%endblock%}
 
- 
+    
     {%block content%} 
 
 
 
-
+    <button onclick="">Salvar</button>
     <div class="modal z-50" id="modal" >
         <div class="modal-content">
             <h4>Ações para o texto selecionado</h4>
@@ -26,9 +26,9 @@
             </div>
         </div>
     </div>
+    
     <div class="book-container">
         <div class="book">
-            
             {{ html_content|safe }}
             
         </div>
