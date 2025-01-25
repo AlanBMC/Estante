@@ -14,7 +14,7 @@ class Documento(models.Model):
     conteudo_html = models.FileField(upload_to=upload_to)  # HTML bruto convertido
     data_criacao = models.DateTimeField(auto_now_add=True)  # Data de criação
     data_atualizacao = models.DateTimeField(auto_now=True)  # Data da última atualização
-
+    capa = models.ImageField(upload_to=upload_to, blank=True, null=True)
     def __str__(self):
         return self.titulo
     

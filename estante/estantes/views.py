@@ -1,7 +1,8 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect 
 import zipfile
 from bs4 import BeautifulSoup
 import os
+from django.contrib import messages
 from django.conf import settings
 from .models import Documento
 # Create your views here.
@@ -12,22 +13,37 @@ def estante(request):
 
     """
     livros = Documento.objects.all()
-    print(livros)
-    return render(request, 'estante.html')
+    #livros.delete()
+    return render(request, 'estante.html', {'livros': livros})
 
 
 def upload_epub(request):
-    if request.method ==  'POST' and request.FILES['epub-file']:
+    if request.method ==  'POST' and request.FILES['epub-file'] and  request.FILES['capa']:
         epub_file = request.FILES['epub-file']
+        capa = request.FILES['capa']
         titulo, html_path = processa_epub(epub_file)
+        documento_existente = Documento.objects.filter(titulo=titulo).first()
+        if documento_existente:
+            # Se o documento já existe, evite duplicar
+            # Opcional: Atualize os campos caso necessário
+            documento_existente.capa = capa  # Atualiza a capa, se necessário
+            documento_existente.save()
+            messages.error(request,'Livro repetido')
+            return redirect('estante')
         documento = Documento.objects.create(
             titulo=titulo,
             conteudo_html=os.path.relpath(html_path, settings.MEDIA_ROOT),  # Caminho relativo ao MEDIA_ROOT
-            autor=titulo
+            autor=titulo,
+            capa=capa
         )
         
         return redirect('estante')
-    
+
+def livro(request, id_livro):
+    livro = Documento.objects.get(id=id_livro)
+    print(livro)
+    return render(request, 'livro.html')
+
 def processa_epub(epub_file):
 
     """
