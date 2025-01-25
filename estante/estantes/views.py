@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect 
+from django.shortcuts import render, redirect,get_object_or_404
 import zipfile
 from bs4 import BeautifulSoup
 import os
@@ -39,10 +39,6 @@ def upload_epub(request):
         
         return redirect('estante')
 
-def livro(request, id_livro):
-    livro = Documento.objects.get(id=id_livro)
-    print(livro)
-    return render(request, 'livro.html')
 
 def processa_epub(epub_file):
 
@@ -84,7 +80,8 @@ def processa_epub(epub_file):
                     if 'src' in img.attrs:
                         img_src = img['src']
                         img_name = os.path.basename(img_src)
-                        img['src'] = img_name
+                        img['src'] = f"{settings.MEDIA_URL}documentos/{nome_do_livro}/{img_name}"
+
 
                 # Obter o conteúiner principal (geralmente <body> ou equivalente)
                 body = soup.find('body') or soup
@@ -101,3 +98,18 @@ def processa_epub(epub_file):
         f.write(page_content)
 
     return nome_do_livro, output_file
+
+
+def livro(request, id_livro):
+    livro = Documento.objects.get(id=id_livro)
+    html_content = ""
+    if livro.conteudo_html:
+        file_path = livro.conteudo_html.path  # Caminho completo do arquivo
+        with open(file_path, "r", encoding="utf-8") as f:
+            html_content = f.read()
+    context = {
+        "livro": livro,
+        "html_content": html_content,
+    }
+
+    return render(request, 'livro.html', context)

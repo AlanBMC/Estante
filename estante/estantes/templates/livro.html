@@ -2,7 +2,7 @@
 {% extends 'base.html' %}
 {%load static %}
     {%block title%}Livro {%endblock%}
-   
+
     <div class="modal z-50" id="modal" >
         <div class="modal-content">
             <h4>Ações para o texto selecionado</h4>
@@ -24,8 +24,8 @@
     
     <div class="book-container">
         <div class="book">
-
+            {{ html_content|safe }}
         </div>
     </div>
+    <script src="{% static 'js/jslivro.js' %}"></script>
     {%endblock%}
- <script src="{% static 'js/jslivro.js' %}"></script>
