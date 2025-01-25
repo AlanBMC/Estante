@@ -8,9 +8,14 @@ Estante2
 
         {%for livro in livros %}
             <div>
+               
                 <a href="{%url 'livro' livro.id %}">
+                   
                     <img class="h-24 w-24 rounded-lg" src="{{livro.capa.url}}" alt="{{livro.titulo}}">
                 </a>
+                <form action="" method=""> {% csrf_token %}
+                    <button><i class="fi fi-tr-rectangle-xmark"></i></button>
+                </form>
             </div>
         {% endfor %}
     </div>

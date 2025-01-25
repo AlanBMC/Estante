@@ -13,7 +13,7 @@ def estante(request):
 
     """
     livros = Documento.objects.all()
-    #livros.delete()
+    
     return render(request, 'estante.html', {'livros': livros})
 
 
@@ -113,3 +113,10 @@ def livro(request, id_livro):
     }
 
     return render(request, 'livro.html', context)
+
+
+def delete_livro(request,id_livro):
+    if request.method == 'POST':
+        documento = get_object_or_404(Documento, id=id_livro)
+        documento.delete()
+        return redirect('estante')
