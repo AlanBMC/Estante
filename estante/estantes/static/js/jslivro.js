@@ -2,7 +2,7 @@ let currentRange;
 let selectedTextNode;
 
 // Função para capturar o texto selecionado e exibir o modal
-document.addEventListener("mouseup", (event) => {
+function marcatexto(){
     const selection = window.getSelection();
     if (selection.toString().trim().length > 0) {
         currentRange = selection.getRangeAt(0);
@@ -31,7 +31,8 @@ document.addEventListener("mouseup", (event) => {
         // Reseta o comentário no campo de texto
         document.getElementById("comment").value = "";
     }
-});
+};
+
 
 // Função para salvar um comentário (com ou sem marcação)
 function saveComment() {
@@ -54,6 +55,8 @@ function saveComment() {
         closeModal();
     }
 }
+document.addEventListener("mouseup", marcatexto); // Para desktop
+document.addEventListener("touchend", marcatexto); 
 function markText(color) {
     if (currentRange) {
     
@@ -136,3 +139,10 @@ function closeModal() {
         const offset = currentPage * -100;
         book.style.transform = `translateX(${offset}%)`;
     }
+    document.getElementById("modal").addEventListener("click", function (event) {
+        const modalContent = document.querySelector(".modal-content");
+        if (!modalContent.contains(event.target)) {
+            const modal = document.getElementById("modal");
+             modal.style.display = "none";
+        }
+    });

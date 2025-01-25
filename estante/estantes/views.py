@@ -123,17 +123,16 @@ def delete_livro(request, id_livro):
         # Obter o caminho da pasta baseada no arquivo
         if documento.conteudo_html:
             folder_path = os.path.join(settings.MEDIA_ROOT, os.path.dirname(str(documento.conteudo_html)))
-            print(f"Pasta caminho: {folder_path}")  # Debug para verificar o caminho da pasta
+            #print(f"Pasta caminho: {folder_path}")  # Debug para verificar o caminho da pasta
 
             # Verifica se a pasta existe e exclui
             if os.path.isdir(folder_path):
                 shutil.rmtree(folder_path)  # Remove a pasta inteira
-                print("Pasta excluída com sucesso.")
+                documento.delete()
+                messages.success(request,"Livro deletado")
             else:
-                print("Pasta não encontrada no sistema de arquivos.")
+                messages.error(request, 'Pasta não encontrada no sistema de arquivos')
 
         # Exclua o objeto do banco de dados
-        documento.delete()
-        print("Documento excluído do banco de dados.")
-
+        
         return redirect('estante')

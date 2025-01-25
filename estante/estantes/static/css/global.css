@@ -98,7 +98,7 @@ body {
     cursor: pointer;
     z-index: 1001;
     }
-    @media(max-width: 1024px) {
+    @media(max-width: 1345px) {
     body {
         padding: 0;
         justify-content: flex-start; /* Ajusta o alinhamento */
@@ -108,7 +108,7 @@ body {
     .book-container {
         width: 90%; /* Reduz a largura para tablets */
         max-width: 900px;
-        height: 70vh; /* Ajusta a altura para caber na tela de tablets */
+        height: 80vh; /* Ajusta a altura para caber na tela de tablets */
         border-radius: 6px; /* Mantém cantos arredondados */
         margin: 1rem auto; /* Centraliza no eixo vertical */
         overflow: hidden;
@@ -124,17 +124,18 @@ body {
     
     .page {
         flex: 0 0 100%;
-        padding: 1.5rem; /* Reduz o padding */
-        overflow-y: hidden;
+        padding: 2.4rem; /* Reduz o padding */
+        
         border-right: 1px dashed #ddd;
         box-sizing: border-box;
         font-size: 1.1rem; /* Ajusta o tamanho da fonte para tablets */
     }
     
     img {
-        max-width: 70%; /* Limita o tamanho da imagem */
-        height: auto;
-        margin-left: 15% ;
+        max-width: 80%;
+        max-height: 90%;
+        display: block;
+        margin: 1rem auto; /* Centraliza e ajusta a imagem */
     }
     
     .menu {
@@ -153,6 +154,7 @@ body {
         line-height: 1.7;
         margin: 0 0 1rem;
         
+        
     }
     .menu-toggle {
         top: 1rem;
@@ -163,7 +165,7 @@ body {
     }
     @media (max-width: 768px) {
     .book-container {
-        height: 760px;
+        height: 560px;
         overflow: hidden;
     }
     
@@ -172,8 +174,10 @@ body {
         line-height: 1.8;
         margin: 0 0 1rem;
         
+        
     }
     .page {
+        height: 500px;
         padding: 1rem;
         font-size: 1rem; /* Ajusta o texto para telas menores */
     }
