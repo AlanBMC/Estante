@@ -17,7 +17,14 @@ class Documento(models.Model):
     capa = models.ImageField(upload_to=upload_to, blank=True, null=True)
     def __str__(self):
         return self.titulo
-    
+    def delete(self, *args, **kwargs):
+        # Remove o arquivo associado antes de excluir o objeto
+        if self.conteudo_html:
+            self.conteudo_html.delete(save=False)
+        if self.capa:
+            self.capa.delete(save=False)
+        super().delete(*args, **kwargs)
+
 class Marcacao(models.Model):
     documento = models.ForeignKey(
         Documento,

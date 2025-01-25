@@ -7,7 +7,8 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('estante/', views.estante, name='estante'),
     path('upload_epub/', views.upload_epub, name='upload_epub'),
-    path('livro/<int:id_livro>', views.livro, name='livro')
+    path('livro/<int:id_livro>/', views.livro, name='livro'),
+    path('livro_delete/<int:id_livro>/', views.delete_livro, name='delete_livro'),
     
 ]
 if settings.DEBUG:
