@@ -6,7 +6,10 @@ from django.contrib import messages
 from django.conf import settings
 from .models import Documento
 import shutil
+from django.core.files.storage import default_storage
+
 # Create your views here.
+MAX_FILENAME_LENGTH = 255
 
 def estante(request):
     """
@@ -22,6 +25,7 @@ def upload_epub(request):
     if request.method ==  'POST' and request.FILES['epub-file'] and  request.FILES['capa']:
         epub_file = request.FILES['epub-file']
         capa = request.FILES['capa']
+
         titulo, html_path = processa_epub(epub_file)
         documento_existente = Documento.objects.filter(titulo=titulo).first()
         if documento_existente:
@@ -32,7 +36,7 @@ def upload_epub(request):
             messages.error(request,'Livro repetido')
             return redirect('estante')
         documento = Documento.objects.create(
-            titulo=titulo,
+            titulo=titulo.replace('_',' '),
             conteudo_html=os.path.relpath(html_path, settings.MEDIA_ROOT),  # Caminho relativo ao MEDIA_ROOT
             autor=titulo,
             capa=capa
@@ -102,18 +106,37 @@ def processa_epub(epub_file):
 
 
 def livro(request, id_livro):
+    # Chave única para o HTML na sessão, baseada no id do livro
+    session_key = f"html_content_{id_livro}"
     livro = Documento.objects.get(id=id_livro)
-    html_content = ""
-    if livro.conteudo_html:
-        file_path = livro.conteudo_html.path  # Caminho completo do arquivo
-        with open(file_path, "r", encoding="utf-8") as f:
-            html_content = f.read()
+    # Verifica se o HTML já está na sessão
+    html_content = request.session.get(session_key, None)
+    
+    if html_content is None:  # Se não estiver na sessão, carregue do arquivo
+        try:
+            livro = Documento.objects.get(id=id_livro)
+            
+            # Verifica se há conteúdo HTML associado ao livro
+            if livro.conteudo_html:
+                file_path = livro.conteudo_html.path  # Caminho completo do arquivo
+                with open(file_path, "r", encoding="utf-8") as f:
+                    html_content = f.read()
+                
+                # Armazena o conteúdo na sessão
+                request.session[session_key] = html_content
+            else:
+                html_content = ""  # Define como vazio caso não haja arquivo HTML
+            
+        except Documento.DoesNotExist:
+            return redirect('estante')  # Lida com livro inexistente
+    
     context = {
         "livro": livro,
         "html_content": html_content,
     }
-
+    
     return render(request, 'livro.html', context)
+
 
 
 def delete_livro(request, id_livro):
