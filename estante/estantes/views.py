@@ -110,28 +110,19 @@ def processa_epub(epub_file):
 
 def livro(request, id_livro):
     # Chave única para o HTML na sessão, baseada no id do livro
-    session_key = f"html_content_{id_livro}"
     livro = Documento.objects.get(id=id_livro)
     # Verifica se o HTML já está na sessão
-    html_content = request.session.get(session_key, None)
     
-    if html_content is None:  # Se não estiver na sessão, carregue do arquivo
-        try:
-            livro = Documento.objects.get(id=id_livro)
+    
+      # Se não estiver na sessão, carregue do arquivo
+    
             # Verifica se há conteúdo HTML associado ao livro
-            if livro.conteudo_html:
-                file_path = livro.conteudo_html.path  # Caminho completo do arquivo
-                with open(file_path, "r", encoding="utf-8") as f:
-                    html_content = f.read()
-                
-                # Armazena o conteúdo na sessão
-                request.session[session_key] = html_content
-            else:
-                html_content = ""  # Define como vazio caso não haja arquivo HTML
-            
-        except Documento.DoesNotExist:
-            return redirect('estante')  # Lida com livro inexistente
-    
+    if livro.conteudo_html:
+        file_path = livro.conteudo_html.path  # Caminho completo do arquivo
+        with open(file_path, "r", encoding="utf-8") as f:
+            html_content = f.read()
+        
+          
     context = {
         "livro": livro,
         "html_content": html_content,
@@ -173,9 +164,10 @@ def atualiza_livro(request):
             idLivro =  data.get('idLivro')
             livro = get_object_or_404(Documento, id=idLivro)
             file_path = livro.conteudo_html.path
-            with open(file_path, 'w', encoding='utf-8') as html_file:
-                html_file.write(html_content)
             
+            with open(file_path, 'w', encoding='utf-8') as html_file:
+                html_file.write(f'<div class="book-container">{html_content}</div>')
+           
             return JsonResponse({'success': True, 'message': 'HTML atualizado com sucesso!'})
 
         except Exception as e:

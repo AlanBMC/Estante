@@ -13,21 +13,6 @@ function marcatexto(){
         modal.style.display = "flex";
 
 
-
-        // Dimensões da tela e do modal
-        const modalWidth = modal.offsetWidth;
-        const modalHeight = modal.offsetHeight;
-        const viewportWidth = window.innerWidth;
-        const viewportHeight = window.innerHeight;
-
-        // Margem de segurança
-        const margin = 10;
-
-    
-        // Aplica as posições ajustadas
-        modal.style.top = `${top}px`;
-        modal.style.left = `${left}px`;
-
         // Reseta o comentário no campo de texto
         document.getElementById("comment").value = "";
     }
@@ -139,11 +124,11 @@ function closeModal() {
         const offset = currentPage * -100;
         book.style.transform = `translateX(${offset}%)`;
     }
-    document.getElementById("modal").addEventListener("click", function (event) {
+    
+    document.getElementById("livro").addEventListener("click", function (event) {
         const modalContent = document.querySelector(".modal-content");
         if (!modalContent.contains(event.target)) {
-            const modal = document.getElementById("modal");
-             modal.style.display = "none";
+            closeModal();
         }
     });
 
