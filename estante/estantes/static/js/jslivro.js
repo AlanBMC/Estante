@@ -148,3 +148,49 @@ function closeModal() {
     });
 
 
+
+function saveHtmlToServer() {
+        const bookContainer = document.querySelector(".book-container"); // Seleciona o container do conteúdo
+        const updatedHtml = bookContainer.innerHTML; // Captura o HTML atualizado
+        const id_livro = document.getElementById('id_dolivro').value
+        console.log(id_livro)
+        fetch('/atualiza_livro/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken') // Adiciona o CSRF Token para segurança
+            },
+            body: JSON.stringify({
+                html_content: updatedHtml,
+                idLivro: id_livro
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                console.log("HTML salvo com sucesso!");
+            } else {
+                console.log("Erro ao salvar o HTML: " + data.message);
+            }
+        })
+        .catch(error => {
+            console.error("Erro:", error);
+            console.log("Ocorreu um erro ao salvar o HTML.");
+        });
+}
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.startsWith(name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    

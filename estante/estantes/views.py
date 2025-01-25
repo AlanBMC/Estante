@@ -1,4 +1,6 @@
 from django.shortcuts import render, redirect,get_object_or_404
+from django.http import JsonResponse
+import json
 import zipfile
 from bs4 import BeautifulSoup
 import os
@@ -61,7 +63,7 @@ def processa_epub(epub_file):
     # Nome do arquivo HTML de saída
     output_file = os.path.join(livro_dir, f"{nome_do_livro}.html")
 
-
+ 
     # Abrir e listar os arquivos no ePub
     with zipfile.ZipFile(epub_file, 'r') as z:
         page_content = ''
@@ -97,10 +99,11 @@ def processa_epub(epub_file):
                     page_content += f"\n<div class='page'>\n{p}\n</div>\n"
                 for img in soup_content.find_all('img'):
                     page_content += f"\n<div class='page'>\n{img}\n</div>\n"
-                
+        
+ 
  # Salvar o arquivo HTML
     with open(output_file, "w", encoding="utf-8") as f:
-        f.write(page_content)
+        f.write(f'<div class="book-container">\n <div class="book">\n {page_content} </div>\n </div>')
 
     return nome_do_livro, output_file
 
@@ -115,7 +118,6 @@ def livro(request, id_livro):
     if html_content is None:  # Se não estiver na sessão, carregue do arquivo
         try:
             livro = Documento.objects.get(id=id_livro)
-            print('ta entrando aqui')
             # Verifica se há conteúdo HTML associado ao livro
             if livro.conteudo_html:
                 file_path = livro.conteudo_html.path  # Caminho completo do arquivo
@@ -159,3 +161,22 @@ def delete_livro(request, id_livro):
         # Exclua o objeto do banco de dados
         
         return redirect('estante')
+    
+
+def atualiza_livro(request):
+    if request.method == 'POST':
+        
+        try:
+            data = json.loads(request.body)
+           
+            html_content = data.get('html_content')  # Captura o HTML enviado
+            idLivro =  data.get('idLivro')
+            livro = get_object_or_404(Documento, id=idLivro)
+            file_path = livro.conteudo_html.path
+            with open(file_path, 'w', encoding='utf-8') as html_file:
+                html_file.write(html_content)
+            
+            return JsonResponse({'success': True, 'message': 'HTML atualizado com sucesso!'})
+
+        except Exception as e:
+            return JsonResponse({'success': False, 'message': str(e)})
