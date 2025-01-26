@@ -9,7 +9,8 @@ urlpatterns = [
     path('upload_epub/', views.upload_epub, name='upload_epub'),
     path('livro/<int:id_livro>/', views.livro, name='livro'),
     path('livro_delete/<int:id_livro>/', views.delete_livro, name='delete_livro'),
-    path('atualiza_livro/', views.atualiza_livro, name='atualiza_livro')
+    path('atualiza_livro/', views.atualiza_livro, name='atualiza_livro'),
+    path('reordenar-livros/', views.reordena_livros, name='reordenar-livros'),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

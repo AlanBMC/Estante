@@ -11,7 +11,6 @@ import shutil
 from django.core.files.storage import default_storage
 
 # Create your views here.
-MAX_FILENAME_LENGTH = 255
 
 def estante(request):
     """
@@ -19,7 +18,7 @@ def estante(request):
 
     """
     livros = Documento.objects.all()
-    
+    print(livros)
     return render(request, 'estante.html', {'livros': livros})
 
 
@@ -156,6 +155,7 @@ def delete_livro(request, id_livro):
     
 
 def atualiza_livro(request):
+
     if request.method == 'POST':
         
         try:
@@ -173,3 +173,19 @@ def atualiza_livro(request):
 
         except Exception as e:
             return JsonResponse({'success': False, 'message': str(e)})
+        
+
+def reordena_livros(request):
+    if request.method == 'POST':
+        try:
+
+            data = json.loads(request.body)
+            nova_ordem = data.get('ordem', [])
+            for index, livro_id in enumerate(nova_ordem):
+                Documento.objects.filter(id=livro_id).update(ordem=index + 1)
+            
+            return JsonResponse({'success': True, 'message': 'Livros reordenados com sucesso!'})
+
+        except Exception as e:
+            return JsonResponse({'success': False, 'message':str(e)})
+    return JsonResponse({'success': False, 'message': 'Método inválido'})
