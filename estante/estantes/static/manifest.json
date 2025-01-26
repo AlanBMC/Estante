@@ -1,0 +1,21 @@
+{
+    "name": "Estante",
+    "short_name": "books",
+    "description": "É uma estante?",
+    "start_url": "/estante",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#4CAF50",
+    "icons": [
+        {
+            "src": "icons/maskable_icon_x192 (3).png",
+            "type": "image/png",
+            "sizes": "192x192"
+        },
+        {
+            "src": "icons/maskable_icon_x512 (3).png",
+            "type": "image/png",
+            "sizes": "512x512"
+        }
+    ]
+}

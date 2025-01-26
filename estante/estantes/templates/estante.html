@@ -1,23 +1,30 @@
 {% extends 'base.html' %}
-
+{%load static %}
 {%block title%}
 Estante2
 {%endblock%} 
 {%block content%}
-    <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
-
-        {%for livro in livros %}
-            <div>
-               
-                <a href="{%url 'livro' livro.id %}">
-                   
-                    <img class="h-24 w-24 rounded-lg" src="{{livro.capa.url}}" alt="{{livro.titulo}}">
-                </a>
-                <form action="{%url 'delete_livro' livro.id  %}" method="POST"> {% csrf_token %}
-                    <button type="submit"><i class="fi fi-tr-rectangle-xmark"></i></button>
-                </form>
-            </div>
-        {% endfor %}
+{%block head%}
+<link rel="stylesheet" href="{% static 'css/estante.css' %}">
+    {%endblock%}
+    {%for livro in livros %}
+<div class="bookshelf">
+    <div class="shelf">
+        <div class="book" draggable="true" style="background-color: #ff6f61;">Livro 1</div>
+        <div class="book" draggable="true" style="background-color: #6c5ce7;">Livro 2</div>
+        <div class="book" draggable="true" style="background-color: #00cec9;">Livro 3</div>
     </div>
-
+    <div class="shelf">
+        <div class="book" draggable="true" style="background-color: #fab1a0;">Livro 4</div>
+        <div class="book" draggable="true" style="background-color: #ffeaa7;">Livro 5</div>
+        <div class="book" draggable="true" style="background-color: #74b9ff;">Livro 6</div>
+    </div>
+    <div class="shelf">
+        <div class="book" draggable="true" style="background-color: #55efc4;">Livro 7</div>
+        <div class="book" draggable="true" style="background-color: #fdcb6e;">Livro 8</div>
+        <div class="book" draggable="true" style="background-color: #d63031;">Livro 9</div>
+    </div>
+</div>
+{% endfor %}
+<script src="{% static 'js/estante.js' %}"></script>
 {%endblock%}

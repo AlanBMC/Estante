@@ -96,7 +96,8 @@ def processa_epub(epub_file):
                 body_content = body.decode_contents()
                 soup_content = BeautifulSoup(body_content, 'html.parser')
                 for p in soup_content.find_all('p'):
-                    page_content += f"\n<div class='page'>\n{p}\n</div>\n"
+                    if p.get_text(strip=True):
+                        page_content += f"\n<div class='page'>\n{p}\n</div>\n"
                 for img in soup_content.find_all('img'):
                     page_content += f"\n<div class='page'>\n{img}\n</div>\n"
         
@@ -121,7 +122,7 @@ def livro(request, id_livro):
         file_path = livro.conteudo_html.path  # Caminho completo do arquivo
         with open(file_path, "r", encoding="utf-8") as f:
             html_content = f.read()
-        
+
           
     context = {
         "livro": livro,

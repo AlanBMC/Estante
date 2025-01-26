@@ -20,6 +20,9 @@ class Documento(models.Model):
     data_criacao = models.DateTimeField(auto_now_add=True)  # Data de criação
     data_atualizacao = models.DateTimeField(auto_now=True)  # Data da última atualização
     capa = models.ImageField(upload_to=upload_to, blank=True, null=True, max_length=500)
+    ordem = models.PositiveIntegerField(default=0)
+    class Meta:
+        ordering = ['ordem'] 
     def __str__(self):
         return self.titulo
     def delete(self, *args, **kwargs):
@@ -29,32 +32,3 @@ class Documento(models.Model):
         if self.capa:
             self.capa.delete(save=False)
         super().delete(*args, **kwargs)
-
-class Marcacao(models.Model):
-    documento = models.ForeignKey(
-        Documento,
-        on_delete=models.CASCADE,
-        related_name='marcacoes'
-    )  # Documento onde a marcação foi feita
-    selecao = models.TextField()  # Texto selecionado
-    offset_inicio = models.IntegerField()  # Posição inicial no HTML
-    offset_fim = models.IntegerField()  # Posição final no HTML
-    cor = models.CharField(max_length=7, default="#FFFF00")  # Cor da marcação (hexadecimal, default amarelo)
-    data_criacao = models.DateTimeField(auto_now_add=True)  # Data de criação
-
-    def __str__(self):
-        return f"Marcação no documento '{self.documento.titulo}' - {self.selecao}"
-    
-
-class Comentario(models.Model):
-    marcacao = models.ForeignKey(
-        Marcacao,
-        on_delete=models.CASCADE,
-        related_name='comentarios'
-    )  # Relaciona o comentário a uma marcação
-    texto = models.TextField()  # Texto do comentário
-    data_criacao = models.DateTimeField(auto_now_add=True)  # Data de criação do comentário
-
-    def __str__(self):
-        return f"Comentário na marcação: '{self.marcacao.selecao[:30]}...'"
-    

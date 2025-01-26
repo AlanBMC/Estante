@@ -3,6 +3,7 @@ let selectedTextNode;
 
 // Função para capturar o texto selecionado e exibir o modal
 function marcatexto(){
+   
     const selection = window.getSelection();
     if (selection.toString().trim().length > 0) {
         currentRange = selection.getRangeAt(0);
@@ -22,37 +23,50 @@ function marcatexto(){
 // Função para salvar um comentário (com ou sem marcação)
 function saveComment() {
     if (currentRange) {
-        const comment = document.getElementById("comment").value;
+        // Obtemos o comentário da área de texto
+        let comment = document.getElementById("comment").value.trim();
 
-        // Verifica se o texto já está marcado, caso contrário, cria um <span>
-        if (selectedTextNode && selectedTextNode.parentElement.classList.contains("highlighted")) {
-            selectedTextNode.parentElement.dataset.comment = comment; // Atualiza o comentário
-        } else {
-            const span = document.createElement("span");
-            span.style.backgroundColor = "yellow"; // Define a cor padrão para marcação
-            span.className = "highlighted";
-            span.dataset.comment = comment; // Salva o comentário
-            span.addEventListener("click", () => showComment(span)); // Torna clicável para exibir o comentário
-            currentRange.surroundContents(span);
+        // Se o comentário estiver vazio, definimos um espaço como padrão
+        if (!comment) {
+            comment = " ";
         }
 
+        // Verifica se o texto já está marcado
+        if (selectedTextNode && selectedTextNode.parentElement.classList.contains("highlighted")) {
+            selectedTextNode.parentElement.dataset.comment = comment; // Atualiza o comentário existente
+        } else {
+            // Cria um novo <span> para envolver o texto selecionado
+            const span = document.createElement("span");
+            span.style.backgroundColor = "yellow"; // Cor padrão
+            span.className = "highlighted";
+            span.dataset.comment = comment; // Salva o comentário (mesmo que seja um espaço)
+            span.addEventListener("click", () => showComment(span)); // Exibe o comentário ao clicar
+            currentRange.surroundContents(span); // Envolve o texto no <span>
+        }
+
+        // Alerta o usuário sobre o comentário salvo
         alert("Comentário salvo: " + comment);
-        closeModal();
+        closeModal(); // Fecha o modal
     }
 }
+
 document.addEventListener("mouseup", marcatexto); // Para desktop
 document.addEventListener("touchend", marcatexto); 
+
 function markText(color) {
     if (currentRange) {
-    
-
+        console.log('markText')
+    let comment = document.getElementById("comment")?.value.trim() || " ";
+    console.log("Comentário recebido:", comment);
     // Verifica se o texto já está marcado, caso contrário, cria um <span>
     if (selectedTextNode && selectedTextNode.parentElement.classList.contains("highlighted")) {
         selectedTextNode.parentElement.dataset.comment = comment; // Atualiza o comentário
+        console.log('aa', comment)
     } else {
         const span = document.createElement("span");
         span.style.backgroundColor = color; // Define a cor padrão para marcação
         span.className = "highlighted";
+        console.log('html puro', span.dataset.comment)
         span.dataset.comment = comment; // Salva o comentário
         span.addEventListener("click", () => showComment(span)); // Torna clicável para exibir o comentário
         currentRange.surroundContents(span);
@@ -65,9 +79,9 @@ function markText(color) {
 function showComment(element) {
     const modal = document.getElementById("modal");
     modal.style.display = "flex";
-
+    
     // Preenche o campo com o comentário armazenado
-    document.getElementById("comment").value = element.dataset.comment || "";
+    document.getElementById("comment").value = element.dataset.comment || " ";
 
     // Atualiza o nó selecionado para edição ou remoção
     selectedTextNode = element.firstChild;
@@ -87,6 +101,7 @@ function closeModal() {
     const modal = document.getElementById("modal");
     modal.style.display = "none";
     document.getElementById("comment").value = ""; // Limpa o campo de comentário
+    saveHtmlToServer();
 }
 
 
@@ -125,20 +140,14 @@ function closeModal() {
         book.style.transform = `translateX(${offset}%)`;
     }
     
-    document.getElementById("livro").addEventListener("click", function (event) {
-        const modalContent = document.querySelector(".modal-content");
-        if (!modalContent.contains(event.target)) {
-            closeModal();
-        }
-    });
-
 
 
 function saveHtmlToServer() {
         const bookContainer = document.querySelector(".book-container"); // Seleciona o container do conteúdo
         const updatedHtml = bookContainer.innerHTML; // Captura o HTML atualizado
         const id_livro = document.getElementById('id_dolivro').value
-        console.log(id_livro)
+
+
         fetch('/atualiza_livro/', {
             method: 'POST',
             headers: {
@@ -178,4 +187,29 @@ function saveHtmlToServer() {
         }
         return cookieValue;
     }
-    
+
+function addClickEventToHighlights() {
+    // Seleciona todos os elementos destacados
+    const highlights = document.querySelectorAll('.highlighted');
+    highlights.forEach((highlight) => {
+        // Adiciona o evento de clique para exibir o modal
+        highlight.addEventListener('click', () => showComment(highlight));
+    });
+}
+
+// Chama a função ao carregar a página para garantir que todos os spans tenham o evento
+document.addEventListener('DOMContentLoaded', addClickEventToHighlights);
+
+
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker
+            .register('/static/sw.js') // Atualize o caminho conforme necessário
+            .then((registration) => {
+                console.log('Service Worker registrado:', registration);
+            })
+            .catch((error) => {
+                console.error('Erro ao registrar o Service Worker:', error);
+            });
+    });
+}
