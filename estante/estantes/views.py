@@ -24,6 +24,7 @@ def estante(request):
     """
     livros = Documento.objects.all()
     prateleiras = list(dividir_em_lotes(livros, 3))  # Grupos de 3 livros
+    print('prateleiras\n',prateleiras)
     return render(request, 'estante.html', {'prateleiras': prateleiras})
 def upload_epub(request):
     if request.method ==  'POST' and request.FILES['epub-file'] and  request.FILES['capa']:
@@ -181,7 +182,6 @@ def atualiza_livro(request):
 def reordena_livros(request):
     if request.method == 'POST':
         try:
-
             data = json.loads(request.body)
             nova_ordem = data.get('ordem', [])
             for index, livro_id in enumerate(nova_ordem):

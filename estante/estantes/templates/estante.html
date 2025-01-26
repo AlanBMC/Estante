@@ -3,10 +3,10 @@
 {%block title%}
 Estante
 {%endblock%} 
-{%block content%}
 {%block head%}
 <link rel="stylesheet" href="{% static 'css/estante.css' %}">
-    {%endblock%}
+{%endblock%}
+{%block content%}
 
     <div class="bookshelf">
         {% for prateleira in prateleiras %}
@@ -16,14 +16,29 @@ Estante
                 <a href="{% url 'livro' livro.id %}">
                     <img src="{{ livro.capa.url }}" alt="{{ livro.nome }}" class="book-cover">
                 </a>
-                <p class="book-title">{{ livro.nome }}</p>
+                <p class="book-title"><i class="fi fi-tr-grip-dots"></i></p>
             </div>
             {% endfor %}
         </div>
         {% endfor %}
     </div>
     
-    
+    <div class="modal">
+        <div class="modal-content">
+            <div class="pages">
+                <!-- Página simulada -->
+                <div class="page page-front">
+                    <h2 class="book-title">Título do Livro</h2>
+                    <p>Primeira página de conteúdo.</p>
+                    <button class="next-page">Próxima Página</button>
+                </div>
+                <div class="page page-back">
+                    <p>Segunda página de conteúdo.</p>
+                    <button class="close-modal">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
     
     
 <script src="{% static 'js/estante.js' %}"></script>

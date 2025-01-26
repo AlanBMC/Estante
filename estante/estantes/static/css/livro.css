@@ -153,7 +153,7 @@ body {
     }
     @media (max-width: 768px) {
     .book-container {
-        height: 560px;
+        height: 560px; 
         overflow: hidden;
     }
     
@@ -161,7 +161,7 @@ body {
         font-size: 1rem; /* Mantém o texto legível em dispositivos menores */
         line-height: 1.8;
         margin: 0 0 1rem;
-        
+        color: #fa1919;
         
     }
     .page {
@@ -205,6 +205,7 @@ body {
     .highlighted:hover {
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
     }
+
     .modal {
             display: none; /* Esconde o modal por padrão */
             position: fixed; /* Fixa o modal na tela */
