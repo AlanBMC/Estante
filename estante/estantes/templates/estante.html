@@ -9,9 +9,9 @@ Estante
     {%endblock%}
 
     <div class="bookshelf">
-
+        {% for prateleira in prateleiras %}
         <div class="shelf">
-            {% for livro in livros %}
+            {% for livro in prateleira %}
             <div class="book" draggable="true" data-id="{{ livro.id }}">
                 <a href="{% url 'livro' livro.id %}">
                     <img src="{{ livro.capa.url }}" alt="{{ livro.nome }}" class="book-cover">
@@ -20,8 +20,9 @@ Estante
             </div>
             {% endfor %}
         </div>
-        
+        {% endfor %}
     </div>
+    
     
     
     

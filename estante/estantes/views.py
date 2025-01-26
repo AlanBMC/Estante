@@ -12,16 +12,19 @@ from django.core.files.storage import default_storage
 
 # Create your views here.
 
+def dividir_em_lotes(queryset, tamanho_lote):
+    """Divide uma queryset em lotes de tamanho especificado."""
+    queryset = list(queryset)  # Certifique-se de que é uma lista
+    for i in range(0, len(queryset), tamanho_lote):
+        yield queryset[i:i + tamanho_lote]
+
 def estante(request):
     """
-    Funcionalidade: Lista os livros do usuario(no tengo users).
-
+    Funcionalidade: Lista os livros.
     """
     livros = Documento.objects.all()
-    print(livros)
-    return render(request, 'estante.html', {'livros': livros})
-
-
+    prateleiras = list(dividir_em_lotes(livros, 3))  # Grupos de 3 livros
+    return render(request, 'estante.html', {'prateleiras': prateleiras})
 def upload_epub(request):
     if request.method ==  'POST' and request.FILES['epub-file'] and  request.FILES['capa']:
         epub_file = request.FILES['epub-file']
