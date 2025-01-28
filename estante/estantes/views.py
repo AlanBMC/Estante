@@ -130,6 +130,7 @@ def livro(request, id_livro):
     context = {
         "livro": livro,
         "html_content": html_content,
+        'paginaatual': livro.paginaatual
     }
     
     return render(request, 'livro.html', context)
@@ -167,9 +168,12 @@ def atualiza_livro(request):
            
             html_content = data.get('html_content')  # Captura o HTML enviado
             idLivro =  data.get('idLivro')
+            paginaAtual= data.get('paginaAtual')
+            
             livro = get_object_or_404(Documento, id=idLivro)
             file_path = livro.conteudo_html.path
-            
+            livro.paginaatual = paginaAtual
+            livro.save()
             with open(file_path, 'w', encoding='utf-8') as html_file:
                 html_file.write(f'<div class="book-container">{html_content}</div>')
            

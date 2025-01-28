@@ -55,18 +55,20 @@ document.addEventListener("touchend", marcatexto);
 
 function markText(color) {
     if (currentRange) {
-        console.log('markText')
+        
+
     let comment = document.getElementById("comment")?.value.trim() || " ";
-    console.log("Comentário recebido:", comment);
     // Verifica se o texto já está marcado, caso contrário, cria um <span>
     if (selectedTextNode && selectedTextNode.parentElement.classList.contains("highlighted")) {
-        selectedTextNode.parentElement.dataset.comment = comment; // Atualiza o comentário
-        console.log('aa', comment)
+        const parent = selectedTextNode.parentElement;
+
+        // Atualiza o comentário e a cor da marcação
+        parent.dataset.comment = comment; // Atualiza o comentário
+        parent.style.backgroundColor = color; // Atualiza a cor
     } else {
         const span = document.createElement("span");
         span.style.backgroundColor = color; // Define a cor padrão para marcação
         span.className = "highlighted";
-        console.log('html puro', span.dataset.comment)
         span.dataset.comment = comment; // Salva o comentário
         span.addEventListener("click", () => showComment(span)); // Torna clicável para exibir o comentário
         currentRange.surroundContents(span);
@@ -107,16 +109,11 @@ function closeModal() {
 
     const book = document.querySelector('.book');
     const pages = document.querySelectorAll('.page');
+
+    const pageAtual = document.getElementById('paginaatual').value
     let isPaginated = true;
-    let currentPage = 0;
-
-    
-
-
-
-    // Adicionar suporte a swipe para paginação
+    let currentPage =pageAtual;
     let startX = 0;
-
     book.addEventListener('touchstart', (e) => {
         if (!isPaginated) return;
         startX = e.touches[0].clientX;
@@ -137,7 +134,9 @@ function closeModal() {
 
     function updatePage() {
         const offset = currentPage * -100;
+
         book.style.transform = `translateX(${offset}%)`;
+        saveHtmlToServer();
     }
     
 
@@ -146,7 +145,7 @@ function saveHtmlToServer() {
         const bookContainer = document.querySelector(".book-container"); // Seleciona o container do conteúdo
         const updatedHtml = bookContainer.innerHTML; // Captura o HTML atualizado
         const id_livro = document.getElementById('id_dolivro').value
-
+        
 
         fetch('/atualiza_livro/', {
             method: 'POST',
@@ -156,7 +155,8 @@ function saveHtmlToServer() {
             },
             body: JSON.stringify({
                 html_content: updatedHtml,
-                idLivro: id_livro
+                idLivro: id_livro,
+                paginaAtual: currentPage,
             })
         })
         .then(response => response.json())
@@ -169,7 +169,6 @@ function saveHtmlToServer() {
         })
         .catch(error => {
             console.error("Erro:", error);
-            console.log("Ocorreu um erro ao salvar o HTML.");
         });
 }
 

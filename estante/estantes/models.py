@@ -21,6 +21,7 @@ class Documento(models.Model):
     data_atualizacao = models.DateTimeField(auto_now=True)  # Data da última atualização
     capa = models.ImageField(upload_to=upload_to, blank=True, null=True, max_length=500)
     ordem = models.PositiveIntegerField(default=0)
+    paginaatual = models.IntegerField(default=0)
     class Meta:
         ordering = ['ordem'] 
     def __str__(self):

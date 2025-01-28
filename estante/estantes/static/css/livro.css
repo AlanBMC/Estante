@@ -153,19 +153,19 @@ body {
     }
     @media (max-width: 768px) {
     .book-container {
-        height: 560px; 
+        height: 750px; 
         overflow: hidden;
     }
     
     p {
-        font-size: 1rem; /* Mantém o texto legível em dispositivos menores */
-        line-height: 1.8;
+        font-size: 0.9rem; /* Mantém o texto legível em dispositivos menores */
+        line-height: 1.4;
         margin: 0 0 1rem;
-        color: #fa1919;
+        
         
     }
     .page {
-        height: 500px;
+        height: 700px;
         padding: 1rem;
         font-size: 1rem; /* Ajusta o texto para telas menores */
     }
@@ -209,7 +209,6 @@ body {
     .modal {
             display: none; /* Esconde o modal por padrão */
             position: fixed; /* Fixa o modal na tela */
-            background: rgba(0, 0, 0, 0.5);
             top: 50%; /* Centraliza na vertical */
             left: 50%; /* Centraliza na horizontal */
             transform: translate(-50%, -50%); /* Ajuste de centralização */

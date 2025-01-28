@@ -8,8 +8,12 @@
     
     {%block content%} 
 
-
-
+<style>
+    .hidden {
+    display: none !important; /* Oculta completamente o menu */
+}
+</style>
+    
    
     <div class="modal z-50" id="modal" >
         <div class="modal-content">
@@ -30,9 +34,33 @@
     </div>
     
        <input type="hidden" id="id_dolivro" value="{{livro.id}}">
-        {{ html_content | safe }}
+       <input type="hidden" id="paginaatual" value="{{livro.paginaatual}}">
+
+       {{ html_content | safe }}
             
         
-   
+       <script>
+        // Seleciona o menu
+        const menu = document.querySelector('.fixed');
+    
+        // Variável para controlar o estado (visível ou escondido)
+        let menuVisible = true;
+    
+        // Função para alternar o estado do menu
+        function toggleMenu() {
+            menuVisible = !menuVisible; // Inverte o estado atual
+            if (menuVisible) {
+                menu.classList.remove('hidden'); // Mostra o menu
+            } else {
+                menu.classList.add('hidden'); // Esconde o menu
+            }
+        }
+        menu.addEventListener('click', (event) => {
+        event.stopPropagation();
+    });
+
+        // Adiciona o evento de clique na tela
+        document.addEventListener('click', toggleMenu);
+    </script>
     <script src="{% static 'js/jslivro.js' %}"></script>
     {%endblock%}
