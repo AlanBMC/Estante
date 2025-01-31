@@ -1,0 +1,66 @@
+
+{% extends 'base.html' %}
+{%load static %}
+    {%block title%}Livro {%endblock%}
+    {%block head%}
+    <link rel="stylesheet" href="{%static 'css/livro.css' %}">
+    {%endblock%}
+    
+    {%block content%} 
+
+<style>
+    .hidden {
+    display: none !important; /* Oculta completamente o menu */
+}
+</style>
+    
+   
+    <div class="modal z-50" id="modal" >
+        <div class="modal-content">
+            <h4>Ações para o texto selecionado</h4>
+            <div class="color-options">
+                <button class="color-btn" style="background: #FFD700;" onclick="markText('#FFD700')"></button>
+                <button class="color-btn" style="background: #FF4500;" onclick="markText('#FF4500')"></button>
+                <button class="color-btn" style="background: #00FF00;" onclick="markText('#00FF00')"></button>
+                <button class="color-btn" style="background: #87CEEB;" onclick="markText('#87CEEB')"></button>
+            </div>
+            <textarea id="comment" placeholder="Adicionar comentário..."></textarea>
+            <div class="modal-actions">
+                <button onclick="saveComment()">Salvar Comentário</button>
+                <button onclick="removeHighlight()">Apagar Marcação</button>
+                <button onclick="closeModal()">Cancelar</button>
+            </div>
+        </div>
+    </div>
+    
+       <input type="hidden" id="id_dolivro" value="{{livro.id}}">
+       <input type="hidden" id="paginaatual" value="{{livro.paginaatual}}">
+
+       {{ html_content | safe }}
+            
+        
+       <script>
+        // Seleciona o menu
+        const menu = document.querySelector('.fixed');
+    
+        // Variável para controlar o estado (visível ou escondido)
+        let menuVisible = true;
+    
+        // Função para alternar o estado do menu
+        function toggleMenu() {
+            menuVisible = !menuVisible; // Inverte o estado atual
+            if (menuVisible) {
+                menu.classList.remove('hidden'); // Mostra o menu
+            } else {
+                menu.classList.add('hidden'); // Esconde o menu
+            }
+        }
+        menu.addEventListener('click', (event) => {
+        event.stopPropagation();
+    });
+
+        // Adiciona o evento de clique na tela
+        document.addEventListener('click', toggleMenu);
+    </script>
+    <script src="{% static 'js/jslivro.js' %}"></script>
+    {%endblock%}

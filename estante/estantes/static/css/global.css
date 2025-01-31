@@ -1,0 +1,13 @@
+.icone {
+    font-size: 2rem; /* Aumenta o tamanho do ícone */
+    width: 3rem; /* Define a largura */
+    height: 3rem; /* Define a altura */
+    cursor: pointer;
+    transition: font-size 0.4s ease, transform 0.4s ease; /* Transição suave */
+
+}
+.icone:hover{
+    font-size: 2.1rem;
+    transform: scale(1.05);
+}
+

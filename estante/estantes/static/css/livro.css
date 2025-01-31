@@ -1,0 +1,258 @@
+
+body {
+    font-family: 'Georgia', serif;
+    line-height: 1.8;
+    margin: 10%;
+    background-color: #f4f1ea;
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    }
+    
+    .book-container {
+    position: relative;
+    width: 100%;
+    max-width: 1200px; /* Aumenta o tamanho máximo em desktops */
+    height: 80vh;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    overflow: hidden;
+    border-radius: 8px; /* Adiciona cantos arredondados */
+    }
+    
+    .book {
+    display: flex;
+    flex-wrap: nowrap;
+    height: 100%;
+    transform: translateX(0);
+    transition: transform 0.5s ease;
+    }
+    
+    .page {
+    flex: 0 0 100%;
+    padding: 2rem;
+    overflow-y: auto;
+    border-right: 1px dashed #ddd;
+    box-sizing: border-box;
+    height: 100%;
+    font-size: 1.2rem; /* Aumenta o tamanho da fonte para desktops */
+    }
+    
+    img {
+    max-width: 100%;
+    height: auto;
+    margin: 1rem 0;
+    }
+    
+    .menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #333;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    }
+    
+    .menu button {
+    background-color: #555;
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1rem;
+    margin-bottom: 0.5rem;
+    cursor: pointer;
+    font-size: 1rem;
+    }
+    
+    .menu button:hover {
+    background-color: #777;
+    }
+    
+    .menu-toggle {
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    cursor: pointer;
+    z-index: 1001;
+    }
+    @media(max-width: 1345px) {
+    body {
+        padding: 0;
+        justify-content: flex-start; /* Ajusta o alinhamento */
+        flex-direction: column; /* Empilha os elementos verticalmente */
+    }
+    
+    .book-container {
+        width: 90%; /* Reduz a largura para tablets */
+        max-width: 900px;
+        height: 80vh; /* Ajusta a altura para caber na tela de tablets */
+        border-radius: 6px; /* Mantém cantos arredondados */
+        margin: 1rem auto; /* Centraliza no eixo vertical */
+        overflow: hidden;
+    }
+    
+    .book {
+        display: flex;
+        flex-wrap: nowrap;
+        height: 100%;
+        transform: translateX(0);
+        transition: transform 0.5s ease;
+    }
+    
+    .page {
+        flex: 0 0 100%;
+        padding: 2.4rem; /* Reduz o padding */
+        
+        border-right: 1px dashed #ddd;
+        box-sizing: border-box;
+        font-size: 1.1rem; /* Ajusta o tamanho da fonte para tablets */
+    }
+    
+    img {
+        max-width: 80%;
+        max-height: 90%;
+        display: block;
+        margin: 1rem auto; /* Centraliza e ajusta a imagem */
+    }
+    
+    .menu {
+        flex-direction: row; /* Exibe os botões lado a lado */
+        justify-content: center;
+        padding: 0.5rem;
+        box-shadow: none; /* Remove sombra no menu */
+    }
+    
+    .menu button {
+        font-size: 1rem;
+        margin: 0 0.5rem; /* Espaçamento entre botões */
+    }
+    p {
+        font-size: 1.2rem; /* Mantém o texto legível em dispositivos menores */
+        line-height: 1.7;
+        margin: 0 0 1rem;
+        
+        
+    }
+    .menu-toggle {
+        top: 1rem;
+        left: 1rem;
+        font-size: 1rem;
+        padding: 0.5rem 1rem;
+    }
+    }
+    @media (max-width: 768px) {
+    .book-container {
+        height: 750px; 
+        overflow: hidden;
+    }
+    
+    p {
+        font-size: 0.9rem; /* Mantém o texto legível em dispositivos menores */
+        line-height: 1.4;
+        margin: 0 0 1rem;
+        
+        
+    }
+    .page {
+        height: 700px;
+        padding: 1rem;
+        font-size: 1rem; /* Ajusta o texto para telas menores */
+    }
+    img {
+        max-width: 80%;
+        height: auto;
+        display: block;
+        margin: 1rem auto; /* Centraliza e ajusta a imagem */
+    }
+    
+    
+    
+    .menu button {
+        font-size: 0.9rem;
+    }
+    }
+    
+    body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+        background: #f4f4f4;
+    }
+    
+    .text-container {
+        padding: 10px;
+        background: white;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+    }
+    
+    .highlighted {
+            background-color: yellow;
+            border-radius: 4px;
+            cursor: pointer; /* Permite clicar no texto */
+            position: relative;
+            }
+    .highlighted:hover {
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+    }
+
+    .modal {
+            display: none; /* Esconde o modal por padrão */
+            position: fixed; /* Fixa o modal na tela */
+            top: 50%; /* Centraliza na vertical */
+            left: 50%; /* Centraliza na horizontal */
+            transform: translate(-50%, -50%); /* Ajuste de centralização */
+            width: 90%; /* Responsivo: ocupa até 90% da largura da tela */
+            max-width: 300px; /* Tamanho máximo do modal */
+            justify-content: center;
+            align-items: center;
+            
+            height: 230px
+            }
+    
+    .modal-content {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        width: 300px;
+    }
+    
+    .color-options {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 10px;
+    }
+    
+    .color-btn {
+        width: 30px;
+        height: 30px;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+    }
+    
+    textarea {
+        width: 100%;
+        height: 60px;
+        margin-bottom: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 5px;
+    }
+    
+    .modal-actions {
+        display: flex;
+        justify-content: space-between;
+    }
+    

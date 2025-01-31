@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+{%load static %}
+{%block title%}
+Estante
+{%endblock%} 
+{%block head%}
+<link rel="stylesheet" href="{% static 'css/estante.css' %}">
+{%endblock%}
+{%block content%}
+<style>
+    /* Estilo personalizado para o background de madeira */
+    .wooden-background {
+        background-image: url('https://www.transparenttextures.com/patterns/wood-pattern.png');
+        background-size: cover;
+        background-repeat: repeat;
+    }
+
+    /* Efeito 3D para os livros */
+    .book {
+        position: relative;
+        transform-style: preserve-3d;
+        transition: transform 0.3s ease;
+    }
+
+    .book::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.1);
+        transform: translateZ(-10px);
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .book:hover {
+        transform: translateY(-5px) rotateX(5deg);
+    }
+
+    /* Barra de indicação de drop */
+    .drop-indicator {
+    position: absolute;
+    height: 2px;
+    background-color: black;
+    width: 100%;
+    display: none;
+    pointer-events: none; /* Impede que a barra interfira com os eventos de arrastar */
+}
+
+    /* Ajuste do tamanho da imagem para celulares */
+    @media (max-width: 640px) {
+        .book-cover {
+            height: 120px !important; /* Altura menor para celulares */
+        }
+        .book {
+            width: 80px; /* Largura menor para livros em celulares */
+        }
+    }
+
+    /* Sombra no background das prateleiras */
+    .shelf {
+        position: relative;
+        background-color: rgba(255, 255, 255, 0.8);
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        padding: 8px; /* Reduzi o padding para aproximar os livros */
+    }
+
+    /* Divisória real entre as prateleiras */
+    .shelf::after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 0;
+        width: 100%;
+        height: 5px;
+        background-color: #8B4513; /* Cor de madeira escura */
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.719);
+    }
+  
+</style>
+</head>
+<body class="bg-gray-100 p-4">
+    <div class="bookshelf max-w-4xl mx-auto wooden-background p-6 rounded-lg shadow-2xl">
+        {% for prateleira in prateleiras %}
+        <div class="shelf bg-gray-300 bg-opacity-75 p-2 mb-8 rounded-lg shadow-md">
+            <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-1 relative"> <!-- Ajustei o gap para 1 -->
+                {% for livro in prateleira %}
+                <div class="book bg-white p-1 rounded-lg shadow-md hover:shadow-lg transition-transform duration-300" draggable="true" data-id="{{ livro.id }}">
+                    <a href="{% url 'livro' livro.id %}">
+                        <img src="{{ livro.capa.url }}" alt="{{ livro.nome }}" class="book-cover w-full h-48 object-cover rounded-lg">
+                    </a>
+                    <p class="book-title text-center mt-1 text-sm font-semibold">{{ livro.nome }}</p>
+                    <!-- Ícone de arrastar -->
+                    <div class="flex justify-center mt-1">
+                        <i class="fas fa-grip-lines text-gray-500 cursor-move"></i>
+                    </div>
+                </div>
+                {% endfor %}
+                <!-- Barra de indicação de drop -->
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    
+
+    
+    
+<script src="{% static 'js/estante.js' %}"></script>
+{%endblock%}
